@@ -12,8 +12,7 @@ int main(int argc, char *argv[]) {
     list = load();
 
     if (argc > 1) {
-        //  strcmp - функция сравнения строк
-        if (strcmp(argv[1], "add") == 0) {
+        if (strcmp(argv[1], "add") == 0) {	//  strcmp - функция сравнения строк
             if (argc == 5) {
                 char *end;
                 int population = (int) strtol(argv[3], &end, 10);
@@ -55,10 +54,6 @@ int main(int argc, char *argv[]) {
         }
     }
     save(list);
-    /* 
-     *  Функция clear удаляет элементы из списка 
-     *  и освобождает выделенную для них память.
-     */
-    clear(list);
+    clear(list);	//	Функция clear удаляет элементы из списка и освобождает выделенную для них память.
     return 0;
 }
