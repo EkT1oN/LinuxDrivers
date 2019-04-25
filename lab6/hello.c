@@ -13,8 +13,8 @@ typedef struct led {
     unsigned char value;
 } led_t;
 /*
- *	Реализовать LEDCMD_RESET_STATE, LEDCMD_GET_STATE, LEDCMD_SET_LED_STATЕ
- *	Для записи в принтерный порт используйте макроопределение - outb(<значение>, PARALLEL_PORT);
+ 	Реализовать LEDCMD_RESET_STATE, LEDCMD_GET_STATE, LEDCMD_SET_LED_STATЕ
+ 	Для записи в принтерный порт используйте макроопределение - outb(<значение>, PARALLEL_PORT);
  *	--
  	В команде LEDCMD_RESET_STATE с помощью макроопределения outb запишите в порт 0 (Лучше для этого состояния объявить константу, например
 	#define INITIAL_STATE 0x00
@@ -56,11 +56,11 @@ unsigned char prn_data_em;
 
 static dev_t dev;
 static struct cdev c_dev;
-static struct class *cl;
+static struct class* cl;
 
-static long hello_ioctl(struct file *f, unsigned int cmd, unsigned long arg);
-static int my_open(struct inode *inode, struct file *file);
-static int my_close(struct inode *inode, struct file *file);
+static long hello_ioctl(struct file* f, unsigned int cmd, unsigned long arg);
+static int my_open(		struct inode* inode, struct file* file);
+static int my_close(	struct inode* inode, struct file* file);
 
 
 static struct file_operations hello_fops = {
@@ -70,7 +70,9 @@ static struct file_operations hello_fops = {
 	.unlocked_ioctl	= hello_ioctl,
 };
 
-/* Инициализация */
+/*
+ *	Инициализация
+ */
 static int __init hello_init(void) {
     int retval;
     bool allocated 	= false;
@@ -119,20 +121,20 @@ static int __init hello_init(void) {
     return retval;
 }
 
-static int my_open(struct inode *inode, struct file *file) {
+static int my_open(struct inode* inode, struct file* file) {
     return 0;
 }
 
-static int my_close(struct inode *inode, struct file *file) {
+static int my_close(struct inode* inode, struct file* file) {
     return 0;
 }
 
-static long hello_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
+static long hello_ioctl(struct file* f, unsigned int cmd, unsigned long arg) {
     led_t led;
 
     /* Обработка команды чтения состояния светодиода */
     if (cmd == LEDCMD_GET_LED_STATE) {
-        if (copy_from_user(&led, (led_t *) arg, sizeof(led_t))) {/* копируем параметры из пользовательского буфера в локальную переменную */
+        if (copy_from_user(&led, (led_t*) arg, sizeof(led_t))) {/* копируем параметры из пользовательского буфера в локальную переменную */
             return -EACCES;
         }
 
@@ -140,7 +142,7 @@ static long hello_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
             return -EINVAL;
         } else {
             led.value = (inb(PARALLEL_PORT) >> led.pin) & 1;     /* Считываем состояния разрядов параллельного порта и сдвигаем    */
-            if (copy_to_user((led_t *) arg, &led, sizeof(led_t))) {  /*  вправо на led.pin разрядов и маскируем 1. Считаем, что светодиод 0 подключен */
+            if (copy_to_user((led_t*) arg, &led, sizeof(led_t))) {  /*  вправо на led.pin разрядов и маскируем 1. Считаем, что светодиод 0 подключен */
                 return -EACCES;
             }/* к младшему разряду порта.  Затем копируем всю структуру обратно в пользовательский буфер */
             else {
@@ -152,7 +154,7 @@ static long hello_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
         prn_state();
         return 0;
     } else if (cmd == LEDCMD_SET_LED_STATE) {
-        if (copy_from_user(&led, (led_t *) arg, sizeof(led_t))) {
+        if (copy_from_user(&led, (led_t*) arg, sizeof(led_t))) {
             return -EACCES;
         }
         printk(KERN_INFO "v: %d, p: %d", led.value, led.pin);
@@ -162,8 +164,7 @@ static long hello_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
             outb(~(1 << led.pin) & inb(PARALLEL_PORT), PARALLEL_PORT);
         }
         prn_state();
-        if (copy_to_user((led_t *) arg, &led,
-                         sizeof(led_t))) {
+        if (copy_to_user((led_t*) arg, &led, sizeof(led_t))) {
             return -EACCES;
         }
         return 0;
@@ -171,7 +172,9 @@ static long hello_ioctl(struct file *f, unsigned int cmd, unsigned long arg) {
     return -EINVAL;
 }
 
-/* Деинициализаия */
+/*
+ *	Деинициализаия
+ */
 static void __exit hello_exit(void) {
     printk(KERN_INFO "Hello ioctl: unregistered\n");
     device_destroy(cl, dev);

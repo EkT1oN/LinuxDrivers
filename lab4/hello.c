@@ -32,7 +32,7 @@ static int print_process_info(void) {
 	struct task_struct *task;
 	for_each_process(task) {
     	/* this pointlessly prints the name and PID of each task */
-    	printk("Hello: %s[%d]\n", task->comm, task->pid);
+    	printk("Hello: %s[%d]\n", task -> comm, task -> pid);
 	}
 	return 0;
 }

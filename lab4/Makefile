@@ -6,8 +6,8 @@ ifneq (${KERNELRELEASE},)
 # Иначе вызов из командной строки.
 # Тогда вызываем среду компиляции ядра.
 else
-    KERNEL_SOURCE := /usr/src/linux-headers-4.15.0-46-generic
-    PWD := $(shell pwd)
+    KERNEL_SOURCE 	:= /usr/src/linux-headers-4.15.0-46-generic
+    PWD 			:= $(shell pwd)
 default:
 	${MAKE} -C ${KERNEL_SOURCE} SUBDIRS=${PWD} modules
 clean:

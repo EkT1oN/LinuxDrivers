@@ -2,8 +2,8 @@
 #define _VECTOR_H_
 
 struct Vector_t {
-	char* data;
-	unsigned int size;
+	char* 			data;
+	unsigned int 	size;
 };
 typedef struct Vector_t Vector_t;
 

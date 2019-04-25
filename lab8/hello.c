@@ -25,24 +25,16 @@
 #define MAX_MESSAGE_LENGTH 10024
 
 static char message[MAX_MESSAGE_LENGTH];
-static int count;
+static int 	count;
 
 static dev_t dev;
 static struct cdev c_dev;
 static struct class* cl;
 
-static int my_open(	struct inode* inode, 
-					struct file* file);
-static int my_close(struct inode* inode, 
-					struct file* file);
-static ssize_t my_read(	struct file* filp,
-						char* buffer,
-					   	size_t length, 
-						loff_t* offset);
-static ssize_t my_write(struct file* filp, 
-						const char* buff,
-						size_t len, 
-						loff_t* off);
+static int my_open(	struct inode* inode, struct file* file);
+static int my_close(struct inode* inode, struct file* file);
+static ssize_t my_read(	struct file* filp, char* buffer, size_t length, loff_t* offset);
+static ssize_t my_write(struct file* filp, const char* buff, size_t len, loff_t* off);
 
 static struct file_operations hello_fops = {
 	.owner 		= THIS_MODULE,
@@ -52,11 +44,13 @@ static struct file_operations hello_fops = {
 	.write 		= my_write
 };
 
-/* Инициализация */
+/*
+ *	Инициализация
+ */
 static int __init hello_init(void)  {
 	int retval;
-	bool allocated = false;
-	bool created = false;
+	bool allocated 	= false;
+	bool created 	= false;
 	cl = NULL;
 
 	retval = alloc_chrdev_region(&dev, 0, 1, "hello");
@@ -104,16 +98,16 @@ err:
 	return retval;
 }
 
-static int my_open(struct inode *inode, struct file *file) {
+static int my_open(struct inode* inode, struct file* file) {
 	/*
 	 * The VFS inode data structure holds 
 	 * information about a file or directory on disk.
 	 */
 	struct pci_dev* pdev = NULL;
-	const char * name;
-	unsigned short vendor;	// 	идентификатор производителя устройства
-	unsigned short device;	//  идентификатор устройства
-	unsigned int class;		//	идентификатор назначения устройства (мост, контроллер USB, контроллер Ethernet)
+	const char* name;
+	unsigned short	vendor;	//	идентификатор производителя устройства
+	unsigned short 	device;	//  идентификатор устройства
+	unsigned int 	class;	//	идентификатор назначения устройства (мост, контроллер USB, контроллер Ethernet)
 
 	/* цикл по всем устройствам */
 	for_each_pci_dev(pdev) {
@@ -143,14 +137,14 @@ static int my_open(struct inode *inode, struct file *file) {
 	return 0;
 }
 
-static int my_close(struct inode *inode, struct file *file) {
+static int my_close(struct inode* inode, struct file* file) {
 	return 0;
 }
 
-static ssize_t my_read(struct file *filp,  
-					   char *buffer, 	/* буфер данных */
-					   size_t length, 	/* длина буфера */
-					   loff_t * offset) {
+static ssize_t my_read(struct file* filp,  
+					   char* 	buffer, 	/* буфер данных */
+					   size_t 	length, 	/* длина буфера */
+					   loff_t*	offset) {
 
 	if (count <= MAX_MESSAGE_LENGTH) {
 		if (message[count] == 0) {
@@ -169,12 +163,14 @@ static ssize_t my_read(struct file *filp,
 	return 0;
 }
 
-static ssize_t my_write(struct file *filp, const char *buff, size_t len, loff_t * off) {
+static ssize_t my_write(struct file* filp, const char* buff, size_t len, loff_t* off) {
 	//#define EINVAL          22      /* Invalid argument */
     return -EINVAL;
 }
 
-/* Деинициализаия */
+/*
+ *	Деинициализаия
+ */
 static void __exit hello_exit(void) {
     printk(KERN_INFO "Hello: unregistered\n");
     device_destroy (cl, dev);
@@ -188,3 +184,4 @@ module_exit(hello_exit);
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Ilgiz Yakhin");
 MODULE_DESCRIPTION("Simple loadable kernel module");
+

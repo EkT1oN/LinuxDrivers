@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DEVICE "/dev/hello"
-#define PCI_INFO "/usr/share/misc/pci.ids"	
+#define DEVICE 		"/dev/hello"
+#define PCI_INFO 	"/usr/share/misc/pci.ids"	
 /*
 1) 	Коментарий. Строка начинается с символа # и содержит текстовый коментарий к содержанию файла. Пример:
 # Vendors, devices and subsystems. Please keep sorted.
@@ -38,8 +38,8 @@
 #define BUF_LEN 100
 #define STR_LEN 100
 
-void add_zeros(char ** str) {
-    char * str1 = (char *)calloc(4, sizeof(char));
+void add_zeros(char** str) {
+    char* str1 = (char*)calloc(4, sizeof(char));
     if (strlen(*str) == 3) {
         strcpy(str1, *str);
         sprintf(*str, "%s%s","0", str1);
@@ -54,14 +54,14 @@ void add_zeros(char ** str) {
     }
 }
 
-int main(int argc, char * argv[]) {
-    FILE * hello_dev 	= fopen(DEVICE, 	"r");
-    FILE * all_pci		= fopen(PCI_INFO, 	"r");
+int main(int argc, char* argv[]) {
+    FILE* hello_dev	= fopen(DEVICE, 	"r");
+    FILE* all_pci	= fopen(PCI_INFO,	"r");
     char info_from_dev[STR_LEN];
     int i;
     char all_pci_info[STR_LEN][BUF_LEN];
-	char * name;
-    char * temp_str;
+	char* name;
+    char* temp_str;
     char str[STR_LEN];
     unsigned int num1;
     unsigned int num2;
@@ -144,3 +144,4 @@ int main(int argc, char * argv[]) {
     free(temp_str);
     return 0;
 }
+

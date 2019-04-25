@@ -72,17 +72,17 @@ int main(int argc, char* argv[]) {
 	sprintf(content, "type=%s&format=%s", configuration.type, configuration.format);
 	if (configuration.isPost) {
 		sprintf(request,
-			"POST %s HTTP/1.0\r\n"
-			"Content-Type:application/x-www-form-urlencoded\r\n"
-			"Content-Length:%zu\r\n"
-			"\r\n"
-			"%s\n",
-			PATH, strlen(content), content);
+				"POST %s HTTP/1.0\r\n"
+				"Content-Type:application/x-www-form-urlencoded\r\n"
+				"Content-Length:%zu\r\n"
+				"\r\n"
+				"%s\n",
+				PATH, strlen(content), content);
 	} else {
 		sprintf(request,
-			"GET %s?%s "
-			"HTTP/1.0\n\n",
-			PATH, content);
+				"GET %s?%s "
+				"HTTP/1.0\n\n",
+				PATH, content);
 	}
 	printf("%s\n", request);
 

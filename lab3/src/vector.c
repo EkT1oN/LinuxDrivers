@@ -1,10 +1,10 @@
-
 #include "vector.h"
-
 #include <stdlib.h>
 #include <string.h>
 
-/* Создание вектора */
+/*
+ *	Создание вектора
+ */
 Vector_t createVec(unsigned int size) {
 	Vector_t vec;
 	vec.data = (char*)malloc(size + 1);
@@ -12,7 +12,9 @@ Vector_t createVec(unsigned int size) {
 	return vec;
 }
 
-/* Инициализация вектора */
+/*
+ *	Инициализация вектора
+ */
 Vector_t initVec() {
 	Vector_t vec;
 	vec.data = NULL;
@@ -20,7 +22,9 @@ Vector_t initVec() {
 	return vec;
 }
 
-/* Добавление одного вектора в конец другого */
+/*
+ *	Добавление одного вектора в конец другого
+ */
 void insertVec(Vector_t* dest, Vector_t* src) {
 	char* newData = (char*)malloc(src->size + dest->size + 1);
 	memcpy(newData, dest->data, dest->size);
@@ -30,7 +34,9 @@ void insertVec(Vector_t* dest, Vector_t* src) {
 	dest->data = newData;
 }
 
-/* Удаление вектора */
+/*
+ *	Удаление вектора
+ */
 void deleteVec(Vector_t* vec) {
 	free(vec->data);
 }

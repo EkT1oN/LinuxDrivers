@@ -35,18 +35,10 @@ static struct class* cl;
 
 void 	ip_handler_unregister(void);
 int 	ip_handler_register(void);
-static int my_open(	struct inode* inode, 
-					struct file* file);
-static int my_close(struct inode* inode, 
-					struct file* file);
-static ssize_t my_read(	struct file* filp, 
-						char* buffer, 
-						size_t length,
-		       			loff_t* offset);
-static ssize_t my_write(struct file* filp, 
-						const char* buff, 
-						size_t len,
-						loff_t* off);
+static int my_open(	struct inode* inode, struct file* file);
+static int my_close(struct inode* inode, struct file* file);
+static ssize_t my_read(	struct file* filp, char* buffer, size_t length, loff_t* offset);
+static ssize_t my_write(struct file* filp, const char* buff, size_t len, loff_t* off);
 
 static struct file_operations hello_fops = {
 	.owner 		= THIS_MODULE,
@@ -95,8 +87,7 @@ static ssize_t my_write(struct file* filp,
 	return -EINVAL;
 }
 
-/* Структура, которая используется для регистрации обработчика. */
-static struct nf_hook_ops nfho;
+static struct nf_hook_ops nfho;	//	Структура, которая используется для регистрации обработчика
 
 /*
  *	Функция обработчика
@@ -116,20 +107,20 @@ unsigned int hook_func(	void* priv,
 
 	char dst_ip[16];
 	char src_ip[16];
-	snprintf(src_ip, 16, "%pI4", &ip_head->saddr);
-	snprintf(dst_ip, 16, "%pI4", &ip_head->daddr);
+	snprintf(src_ip, 16, "%pI4", &ip_head -> saddr);
+	snprintf(dst_ip, 16, "%pI4", &ip_head -> daddr);
 
-	if (ip_head->protocol == IPPROTO_TCP) {
+	if (ip_head -> protocol == IPPROTO_TCP) {
 		tcp_head = tcp_hdr(skb);
 		sprintf(packet_string, "Packet\tTCP\t%s:%i\t\t->\t%s:%i\n",
-			src_ip, htons(tcp_head->source), dst_ip,
-			htons(tcp_head->dest));
+			src_ip, htons(tcp_head -> source), dst_ip,
+			htons(tcp_head -> dest));
 	}
-	else if (ip_head->protocol == IPPROTO_UDP) {
+	else if (ip_head -> protocol == IPPROTO_UDP) {
 		udp_head = udp_hdr(skb);
 		sprintf(packet_string, "Packet\tUDP\t%s:%i\t\t->\t%s:%i\n",
-			src_ip, htons(udp_head->source), dst_ip,
-			htons(udp_head->dest));
+			src_ip, htons(udp_head -> source), dst_ip,
+			htons(udp_head -> dest));
 	}
 	else {
 		sprintf(packet_string, "Packet\t%d\t%s\t\t->\t%s\n",
@@ -149,11 +140,9 @@ int ip_handler_register(void) {
 	/* Fill in our hook structure */
 	nfho.hook = hook_func;
 	/* Handler function */
-	nfho.hooknum =
-	    NF_INET_PRE_ROUTING; /* Первое сетевое событие для IPv4 */
+	nfho.hooknum = NF_INET_PRE_ROUTING; /* Первое сетевое событие для IPv4 */
 	nfho.pf = PF_INET;
-	nfho.priority =
-	    NF_IP_PRI_FIRST; /* Назначаем обработчику 1-ый приоритет */
+	nfho.priority = NF_IP_PRI_FIRST; /* Назначаем обработчику 1-ый приоритет */
 	/*
 	 *	upd:
 	 *	сам обработчик отдельно привязывается для выбранного сетевого интерфейса,
@@ -177,11 +166,13 @@ void ip_handler_unregister(void) {
 	printk("Hello: Netfilter hook unregistered!\n");
 }
 
-/* Функция инициализации драйвера */
+/*
+ *	Функция инициализации драйвера
+ */
 static int __init hello_init(void) {
 	int retval;
-	bool allocated = false;
-	bool created = false;
+	bool allocated 	= false;
+	bool created 	= false;
 	cl = NULL;
 
 	retval = alloc_chrdev_region(&dev, 0, 1, "hello");
@@ -226,7 +217,9 @@ err:
 	return 0;
 }
 
-/* Функция деинициализации драйвера. */
+/*
+ *	Функция деинициализации драйвера
+ */
 static void __exit hello_exit(void) {
 	printk(KERN_INFO "Hello: unregistered\n");
 	device_destroy(cl, dev);
@@ -238,4 +231,5 @@ module_init(hello_init);
 module_exit(hello_exit);
 
 MODULE_LICENSE("GPL");
-MODULE_AUTHOR("MIlgiz Yakhin");
+MODULE_AUTHOR("Ilgiz Yakhin");
+

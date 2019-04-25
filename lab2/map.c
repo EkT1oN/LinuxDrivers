@@ -22,16 +22,9 @@ unsigned int hash(char* key) {
 
 /* Добавляет элемент к хэш таблице */
 void map_add(COUNTRY** map, char* name, int population, int area) {
-<<<<<<< HEAD
     unsigned idx = hash(name);              // 1. Получение значение хеша ключа name
     COUNTRY** insertion_place = &map[idx];  // 
     if (*insertion_place == NULL) {
-=======
-    unsigned idx = hash(name);
-    COUNTRY** insertion_place = &map[idx];
-    COUNTRY* target = find(*insertion_place, name);
-    if (target == NULL) {
->>>>>>> new
         add(insertion_place, name, population, area);
     } else {
         target -> population 	= population;

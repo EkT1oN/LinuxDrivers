@@ -15,9 +15,9 @@
 #include <linux/device.h>
 #include <linux/cdev.h>
 #include <linux/fs.h>
-#include <asm/uaccess.h> 
 #include <linux/string.h>
 #include <linux/version.h>
+#include <asm/uaccess.h> 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 11, 0)
 	#include <linux/signal.h>
 #else
@@ -54,7 +54,7 @@ static struct file_operations hello_fops = {
 	 */
 	.owner 		= THIS_MODULE,
 	.open 		= my_open,
-	.release 	= my_close,
+	.release	= my_close,
 	.read 		= my_read,
 	.write 		= my_write
 };
@@ -64,8 +64,8 @@ static struct file_operations hello_fops = {
  */
 static int __init hello_init(void) {
 	int retval;
-	bool allocated = false;
-	bool created = false;
+	bool allocated 	= false;
+	bool created 	= false;
 	cl = NULL;
 
 	retval = alloc_chrdev_region(&dev, 0, 1, "hello");
@@ -111,23 +111,23 @@ err:
 static int my_open(struct inode* inode, struct file* file) {
     int comm_len;
     int written;
-    struct task_struct *task_list;
+    struct task_struct* task_list;
 
-    write_idx = 0;
-    read_idx = 0;
+    write_idx 	= 0;
+    read_idx 	= 0;
     for_each_process(task_list) {
-        pr_info("== %s [%d]\n", task_list->comm, task_list->pid);
-        comm_len = strlen(task_list->comm);
+        pr_info("== %s [%d]\n", task_list -> comm, task_list -> pid);
+        comm_len = strlen(task_list -> comm);
         if (write_idx + comm_len >= MAX_MESSAGE_LENGTH) {
             return 0;
         }
-        memcpy(message + write_idx, task_list->comm, comm_len);
+        memcpy(message + write_idx, task_list -> comm, comm_len);
         write_idx += comm_len;
         if (write_idx + 17 >= MAX_MESSAGE_LENGTH) {
             return 0;
         }
         message[write_idx++] = ' ';
-        written = snprintf(message + write_idx, 16, "%d", task_list->pid);
+        written = snprintf(message + write_idx, 16, "%d", task_list -> pid);
         write_idx += written;
         if (write_idx + 1 >= MAX_MESSAGE_LENGTH) {
             return 0;
@@ -158,7 +158,7 @@ static ssize_t my_read( struct file* 	filp,
     return sizeof(ch); /* количество байт возвращаемых драйвером в буфере */
 }
 
-static ssize_t my_write(struct file *filp, const char *buff, size_t len, loff_t * off) {
+static ssize_t my_write(struct file* filp, const char* buff, size_t len, loff_t* off) {
         return -EINVAL;
 }
 

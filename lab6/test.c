@@ -6,9 +6,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define LEDCMD_RESET_STATE _IO(		HELLO_MAJOR, 1)             //	погасить все индикаторы
-#define LEDCMD_GET_LED_STATE _IOWR(	HELLO_MAJOR, 3, led_t *)	//	вернуть значение индикатора с указанным номером
-#define LEDCMD_SET_LED_STATE _IOW(	HELLO_MAJOR, 4, led_t *)	//	установить значение индикатора с указанным номером
+#define LEDCMD_RESET_STATE _IO(		HELLO_MAJOR, 1)         //	погасить все индикаторы
+#define LEDCMD_GET_LED_STATE _IOWR(	HELLO_MAJOR, 3, led_t*)	//	вернуть значение индикатора с указанным номером
+#define LEDCMD_SET_LED_STATE _IOW(	HELLO_MAJOR, 4, led_t*)	//	установить значение индикатора с указанным номером
 
 #define  HELLO_MAJOR 250
 
@@ -39,9 +39,7 @@ int set_led_state(int pin, char val) {
 }
 
 int get_led_state(int pin) {
-    led_t led = {
-		.pin = pin
-	};
+    led_t led = { pin = pin };
     int fd = open("/dev/hello", O_RDWR);
     if (fd == -1) {
         return -1;
@@ -88,15 +86,15 @@ int run_commands(int argc, char** argv) {
         }
     } else if (argc == 3) {
         if (!strcmp(argv[1], "on")) {
-            char *end;
+            char* end;
             int pin = (int) strtol(argv[2], &end, 10);
             set_led_state(pin, 1);
         } else if (!strcmp(argv[1], "off")) {
-            char *end;
+            char* end;
             int pin = (int) strtol(argv[2], &end, 10);
             set_led_state(pin, 0);
         } else if (!strcmp(argv[1], "ledstate")) {
-            char *end;
+            char* end;
             int pin = (int) strtol(argv[2], &end, 10);
             get_led_state(pin);
         }
@@ -107,3 +105,4 @@ int run_commands(int argc, char** argv) {
 int main(int argc, char** argv) {
     return run_commands(argc, argv);
 }
+
