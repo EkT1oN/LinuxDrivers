@@ -1,5 +1,5 @@
 /*
- *	lab8
+ *	lab8 -
  *	by Ilgiz Yakhin
  *	hello.c – Простой загружаемый модуль ядра
  *	Comands:

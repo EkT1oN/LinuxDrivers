@@ -1,4 +1,17 @@
-/* hello.c – Заготовка для второй лабораторной работы */
+/* 
+ *	lab6 -
+ *	by Ilgiz Yakhin
+ *	hello.c – Простой загружаемый модуль ядра
+ *	Comands:
+ *	make					- компилирование модуля
+ *	sudo insmod hello.ko 	- установка загружаемого модуля в систему
+ *	lsmod | head -10		- проверка, что модуль установлен (вывод списка модулей зарегистрированных в системе)
+ *	dmesg | tail			- вывод журнала системных сообщений
+ *	sudo rmmod hello		- удаление модуля
+ *	sudo ./a.out on/off 2
+ *	sudo ./a.out ledstate
+ *	sudo ./a.out reset
+ */
 #include <linux/module.h>
 #include <linux/version.h>
 #include <linux/kernel.h>
